@@ -1,0 +1,25 @@
+version: "3.2"
+services:
+  mongodb:
+    image: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - type: volume
+        source: mongodb
+        target: /data/db
+
+  cashapi:
+    image: node
+    ports:
+      - 8080:8080
+    depends_on:
+      - 'mongodb'
+    volumes:
+      - ./:/app
+    working_dir: /app
+    command: npm start
+
+volumes:
+  mongodb:
+    external: true
