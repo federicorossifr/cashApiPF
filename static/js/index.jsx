@@ -3,7 +3,7 @@ console.log("Index")
 class ItemList extends React.Component {
     renderItems() {
         const items = this.props.elements.map((element,index) => 
-            <tr key={index}>
+            <tr key={element._id}>
                 <td>{element.date}</td>
                 <td className={element.amountIn ? "moneyIn":"moneyOut"}>{element.amountIn ? element.amountIn:element.amountOut}€</td>
                 <td>{element.type}</td>
@@ -37,6 +37,7 @@ class ItemList extends React.Component {
 class Summary extends React.Component {
 
     computeSummary() {
+        if(this.props.elements.length < 1) return {'in':0,'out':0}
         let incomes = this.props.elements.map((el) => (el.amountIn? el.amountIn:0))
         let outcomes = this.props.elements.map((el) => (el.amountOut? el.amountOut:0))
 
@@ -48,11 +49,10 @@ class Summary extends React.Component {
 
     render() {
         let summary = this.computeSummary()
-        console.log(summary)
         return (
             <div>
                 <h1 className="display-4">Saldo: {summary.in + summary.out}</h1>
-                <p><label style={{color:"green"}}>In: {summary.in}</label><br></br> 
+                <p className="lead"><label style={{color:"green"}}>In: {summary.in}</label><br></br> 
                 <label style={{color:"red"}}>Out: {summary.out}</label></p>
             </div>
         )
@@ -74,7 +74,7 @@ class MainDashboard extends React.Component {
     }
 
     componentDidMount() {
-        this.cashApiClient.dummy().then(result => 
+        this.cashApiClient.allTransactions().then(result => 
         {
             this.setState({
                 elements:result,
