@@ -1,0 +1,37 @@
+<div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 280px;">
+    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+        <span class="fs-4">CashAPI</span>
+    </a>
+    <hr>
+    <ul class="nav nav-pills flex-column mb-auto">
+        <li class="nav-item">
+        <a href="./" class="nav-link <%= page == 'home' ? "active":'text-white' %>" aria-current="page">
+            <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"/></svg>
+            Home
+        </a>
+        </li>
+        <hr>
+        <% accounts.forEach(function(acc) { %>
+            <li class="nav-item">
+                <a href="./accounts/<%= acc._id %>" class="nav-link <%= (page =='details' && account._id == acc._id)? 'active':'text-white' %>" >
+                    <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"/></svg>
+                    <%= acc.name %>
+                </a>
+            </li>
+        <% }) %>
+        <hr>
+        <li>
+        <a href="#" class="nav-link text-white">
+            <svg class="bi me-2" width="16" height="16"><use xlink:href="#table"/></svg>
+            Importa
+        </a>
+        </li>
+        <li>
+        <a href="#" class="nav-link text-white">
+            <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"/></svg>
+            Impostazioni
+        </a>
+        </li>
+    </ul>
+</div>
+<div class="b-example-divider"></div>

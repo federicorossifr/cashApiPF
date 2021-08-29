@@ -1,4 +1,6 @@
-console.log("Index")
+import React from 'react'
+import ReactDOM from 'react-dom'
+import CashApiClient from './cashAPIClient'
 
 class ItemList extends React.Component {
     renderItems() {
@@ -17,13 +19,13 @@ class ItemList extends React.Component {
     render() {
         return (
             <table className="table  table-striped table-hover">
-                <thead>
+                <thead className="table-dark">
                     <tr>
-                        <th>Date</th>
-                        <th>Amount</th>
-                        <th>Type</th>
-                        <th>Category</th>
-                        <th>Description</th>
+                        <th>Data</th>
+                        <th>Importo</th>
+                        <th>Tipo</th>
+                        <th>Categoria</th>
+                        <th>Descrizione</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -50,18 +52,21 @@ class Summary extends React.Component {
     render() {
         let summary = this.computeSummary()
         return (
-            <div>
-                <h1 className="display-4">Saldo: {summary.in + summary.out}</h1>
-                <p className="lead"><label style={{color:"green"}}>In: {summary.in}</label><br></br> 
-                <label style={{color:"red"}}>Out: {summary.out}</label></p>
+            <div class="card bg-dark my-card text-white ">
+                <h1 className="display-4">Saldo: {summary.in + summary.out}<i class="bi bi-currency-euro"></i></h1>
+                <p className="lead">
+                    <label style={{color:"green"}}><i class="bi bi-plus-circle-fill"></i></label> {summary.in}<i class="bi bi-currency-euro"></i><br></br> 
+                    <label style={{color:"red"}}><i class="bi bi-dash-circle-fill"></i></label> {Math.abs(summary.out)}<i class="bi bi-currency-euro"></i>
+                </p>
             </div>
         )
     }
 }
 
-class MainDashboard extends React.Component {
+class AccountTransactionDetails extends React.Component {
     constructor(props) {
         super(props)
+        console.log("Inited dashboard")
         this.state = {
             elements:[],
             viewElements:[],
@@ -74,7 +79,7 @@ class MainDashboard extends React.Component {
     }
 
     componentDidMount() {
-        this.cashApiClient.allTransactions().then(result => 
+        this.cashApiClient.allAccountTransactions(this.props.accountId).then(result => 
         {
             this.setState({
                 elements:result,
@@ -111,18 +116,37 @@ class MainDashboard extends React.Component {
     render() {
         return (
             <div className="mainDashboard">
-                {this.state.isLoaded && <Summary elements={this.state.elements}/>}
+                <div className="row">
+                    <div className="col">
+                        {this.state.isLoaded && <Summary elements={this.state.elements}/>}
+                    </div>
+                </div>
                 <br></br><br></br>
-                <input className="form-control" value={this.state.searchInput} onChange={this.onSearchChange} placeholder="Search..."></input>
+                
+                <div className="row">
+                    <div className="col-2">
+                        <input className="bg-dark form-control text-white my-search-input" value={this.state.searchInput} onChange={this.onSearchChange} placeholder="Cerca movimento"></input>
+                    </div>
+                    <div className="col-2 my-add-btn-wrap">
+                        <button type="button" class="btn btn-dark my-add-btn">Aggiungi</button>
+                    </div>
+                </div>
+
                 {!this.state.isLoaded && <label>Loading...</label>}
-                {this.state.isLoaded && <ItemList elements={this.state.viewElements} removeCallback={this.handleRemove} />}
+                <div className="row">
+                    <div className="col">
+                        {this.state.isLoaded && <ItemList elements={this.state.viewElements} removeCallback={this.handleRemove} />}
+                    </div>
+                </div>
+                
             </div>
         )
     }
 }
 
 
+const accountId = document.getElementById("root").getAttribute("data-account-id")
 ReactDOM.render(
-    <MainDashboard />,
+    <AccountTransactionDetails accountId={accountId}/>,
     document.getElementById("root")
 )

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('./header.ejs') %>
+</head>
+<body>
+    
+    <main class="flex">
+        <%- include('./navbar.ejs') %>
+        <div class="d-flex flex-column flex-grow-1 p-3 account-summary">
+            <h2 class=" bg-dark text-white account-detail-name"> <%= account.name %></h2>
+            <div data-account-id=<%= account._id %> id="root"></div>
+        </div>
+    </main> 
+</body>
+
+<script type="text/javascript" src="/js/accountDetails.js"></script>
+</html>
