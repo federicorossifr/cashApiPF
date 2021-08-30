@@ -1,12 +1,24 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import CashApiClient from './cashAPIClient'
+import "react-datepicker/dist/react-datepicker.css";
+import DatePicker  from "react-datepicker";
+import { parseISO } from 'date-fns'
+import { it } from 'date-fns/locale'
+import format from 'date-fns/format';
 
 class ItemList extends React.Component {
+
+    formatDate(dateString) {
+        let parsed = parseISO(dateString,{locale:it})
+        let formatted = format(parsed,"dd.MM.yyyy")
+        return formatted;
+    }
+
     renderItems() {
         const items = this.props.elements.map((element,index) => 
             <tr key={element._id}>
-                <td>{element.date}</td>
+                <td>{this.formatDate(element.date)}</td>
                 <td className={element.amountIn ? "moneyIn":"moneyOut"}>{element.amountIn ? element.amountIn:element.amountOut}€</td>
                 <td>{element.type}</td>
                 <td>{element.category}</td>
@@ -63,6 +75,83 @@ class Summary extends React.Component {
     }
 }
 
+class NewTransactionForm extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            amountInput:"",
+            typeInput:"",
+            descriptionInput:"",
+            categoryInput:"",
+            dateInput: new Date()
+        }
+
+        this.onDatePickerChange = this.onDatePickerChange.bind(this)
+        this.onInputChange = this.onInputChange.bind(this)
+        this.onFormSubmit = this.onFormSubmit.bind(this)
+    }
+
+    onDatePickerChange(date) {
+        this.setState({dateInput:date})
+    }
+
+    onInputChange(event) {
+        switch (event.target.name) {
+            case "amount":
+                this.setState({amountInput:event.target.value})
+                break;
+            case "category":
+                this.setState({categoryInput:event.target.value})
+                break;
+            case "description":
+                this.setState({descriptionInput:event.target.value})
+                break;
+            case "type":
+                this.setState({typeInput:event.target.value})
+                break;
+        }
+    }
+
+    onFormSubmit(event) {
+        event.preventDefault();
+        let transaction = {
+            'date':this.state.dateInput,
+            'description':this.state.descriptionInput,
+            'amountIn': (this.state.amountInput > 0) ? parseInt(this.state.amountInput): null,
+            'amountOut': (this.state.amountInput < 0) ? parseInt(this.state.amountInput): null,
+            'type': this.state.typeInput,
+            'category': this.state.categoryInput
+        }
+        this.props.addItemCallback(transaction)
+    }
+
+    render() {
+
+        return (
+            <form onSubmit={this.onFormSubmit}>
+                <div className="my-form-row">
+                    <div className="input-group">
+                        <span class="input-group-text"><i class="bi bi-currency-euro"></i></span>
+                        <input name="amount" value={this.state.amountInput} type="number" step="0.01" class="form-control" placeholder="Importo" onChange={this.onInputChange}></input>
+                    </div>
+                    <DatePicker  selected={this.state.dateInput} className="form-control" onChange={this.onDatePickerChange} />
+                    <input name="category" value={this.state.categoryInput} type="text" class="form-control" placeholder="Categoria" onChange={this.onInputChange}></input>
+
+                </div>
+
+                <div className="my-form-row">
+                    <input name="description" value={this.state.descriptionInput} type="text" class="form-control" placeholder="Descrizione" onChange={this.onInputChange}></input>
+                    <input name="type" value={this.state.typeInput} type="text" class="form-control" placeholder="Tipo" onChange={this.onInputChange}></input>
+                </div>
+
+                <div className="my-form-row">
+                    <button type="submit" class="form-control btn btn-dark">Aggiungi</button>
+                </div>
+            </form>
+        )
+    }
+}
+
 class AccountTransactionDetails extends React.Component {
     constructor(props) {
         super(props)
@@ -81,9 +170,13 @@ class AccountTransactionDetails extends React.Component {
     componentDidMount() {
         this.cashApiClient.allAccountTransactions(this.props.accountId).then(result => 
         {
+            let sorted = result.sort((a,b) => {
+                return (new Date(a.date) < new Date(b.date));
+            })
+            console.log(sorted)
             this.setState({
-                elements:result,
-                viewElements:result,
+                elements:sorted,
+                viewElements:sorted,
                 isLoaded:true
             })
         })
@@ -91,16 +184,10 @@ class AccountTransactionDetails extends React.Component {
 
 
 
-    addItem() {
-        let elements = this.state.elements
-        let newid = this.state.uuid+1
-        elements.push({'id':newid,'name':this.state.newItemInput})
-        this.setState({
-            elements:elements,
-            viewElements:elements,
-            uuid:newid,
-            searchInput:""
-        })
+    addItem(transactionItem) {
+        transactionItem["accountId"] = this.props.accountId
+        this.cashApiClient.addAccountTransaction(this.props.accountId,transactionItem)
+        console.log(transactionItem)
     }
 
 
@@ -122,15 +209,20 @@ class AccountTransactionDetails extends React.Component {
                     </div>
                 </div>
                 <br></br><br></br>
+
+                <div className="row">
+                    <NewTransactionForm addItemCallback={this.addItem} />
+                </div>
+
+                <br></br>
                 
                 <div className="row">
                     <div className="col-2">
                         <input className="bg-dark form-control text-white my-search-input" value={this.state.searchInput} onChange={this.onSearchChange} placeholder="Cerca movimento"></input>
                     </div>
-                    <div className="col-2 my-add-btn-wrap">
-                        <button type="button" class="btn btn-dark my-add-btn">Aggiungi</button>
-                    </div>
                 </div>
+
+
 
                 {!this.state.isLoaded && <label>Loading...</label>}
                 <div className="row">

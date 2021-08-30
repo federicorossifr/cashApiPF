@@ -1,26 +1,25 @@
 var express = require("express")
-var CashDB = require("./lib/cashDB")
-const cdb = new CashDB()
-
 var app = express()
-app.use(express.static("static"))
-app.get("/", (req,res) => {
-    res.sendFile('static/index.html')
-})
+var morgan = require('morgan')
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 
-app.get("/api/v1/dummy",(req,res) => { })
+app.set('view engine', 'ejs');
+app.set('views','./views/')
+app.use(express.static(__dirname + '/static'))
 
-app.get("/api/v1/transactions", (req,res) => {
-    cdb.getAllTransactions((err,transactions) => {
-        if(err) throw err;
-        res.json(transactions)
-    })
-})
+app.use(express.urlencoded({extended: true}));
+app.use(express.json()) // To parse the incoming requests with JSON payloads
 
+var apiV1Router = require("./lib/apiV1Routes")
+var viewRouter = require("./lib/viewRoutes")
+
+app.use("/api/v1/",apiV1Router)
+app.use("/webapp",viewRouter)
 
 
 var server = app.listen(8080,() => {
     var host = server.address().address
     var port = server.address().port
-    console.log("Example app listening at http://%s:%s", host, port)
+    console.log("API Server started at http://localhost:%s/api/v1", port)
+    console.log("Homepage at http://localhost:%s/webapp", port)
 })
