@@ -23,6 +23,11 @@ class CashApiClient {
         const opts = {method:'POST', body:JSON.stringify(transaction), headers:{'Content-Type': 'application/json'}}
         return fetch("/api/v1/accounts/"+accountId+"/transactions",opts).then(res => res.json())
     }
+
+    addAccount(account) {
+        const opts = {method:'POST', body:JSON.stringify(account), headers:{'Content-Type': 'application/json'}}
+        return fetch("/api/v1/accounts/",opts).then(res => res.json())
+    }
 }
 
 module.exports = CashApiClient

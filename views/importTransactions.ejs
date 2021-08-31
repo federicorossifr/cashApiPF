@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('./header.ejs') %>
+</head>
+<body>
+    <main class="flex">
+        <%- include('./navbar.ejs') %>
+        <form action="/api/v1/accounts/612b756d9991f60bb6f931f4/transactions/import" method="post" enctype="multipart/form-data">
+            <input type="file" name="transactionFile" />
+            <input type="text" name="accountid" />
+            <input type="submit" />
+          </form>
+    </main> 
+</body>
+
+</html>

@@ -6,32 +6,23 @@
     <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item">
         <a href="./" class="nav-link <%= page == 'home' ? "active":'text-white' %>" aria-current="page">
-            <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"/></svg>
-            Home
+            <i class="bi bi-bank"></i>  Home
         </a>
         </li>
         <hr>
-        <% accounts.forEach(function(acc) { %>
-            <li class="nav-item">
-                <a href="./accounts/<%= acc._id %>" class="nav-link <%= (page =='details' && account._id == acc._id)? 'active':'text-white' %>" >
-                    <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"/></svg>
-                    <%= acc.name %>
-                </a>
-            </li>
-        <% }) %>
+        <div id="navbar-account"></div>
         <hr>
         <li>
-        <a href="#" class="nav-link text-white">
-            <svg class="bi me-2" width="16" height="16"><use xlink:href="#table"/></svg>
-            Importa
+        <a href="./import" class="nav-link <%= page == 'import' ? "active":'text-white' %>">
+            <i class="bi bi-cloud-arrow-up"></i>  Importa
         </a>
         </li>
         <li>
         <a href="#" class="nav-link text-white">
-            <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"/></svg>
-            Impostazioni
+            <i class="bi bi-sliders"></i>  Impostazioni
         </a>
         </li>
     </ul>
 </div>
+<script type="text/javascript" src="/js/accountNavigation.js"></script>
 <div class="b-example-divider"></div>

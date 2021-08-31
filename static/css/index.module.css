@@ -33,6 +33,7 @@
 
 .account-summary {
     padding-top:18px;
+    overflow-y: auto;
 }
 
 .my-card {
@@ -74,4 +75,12 @@
     width:20%;
     border-width: 0px !important;
     border-radius: 0px !important;
+}
+
+.text-white.my-new-account {
+    background-color:#198754 !important;
+}
+
+.navbar-form-control {
+    margin-top:5px;
 }

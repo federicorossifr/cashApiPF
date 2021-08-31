@@ -10,7 +10,7 @@ import format from 'date-fns/format';
 class ItemList extends React.Component {
 
     formatDate(dateString) {
-        let parsed = parseISO(dateString,{locale:it})
+        let parsed = parseISO(dateString)
         let formatted = format(parsed,"dd.MM.yyyy")
         return formatted;
     }
@@ -186,8 +186,9 @@ class AccountTransactionDetails extends React.Component {
 
     addItem(transactionItem) {
         transactionItem["accountId"] = this.props.accountId
-        this.cashApiClient.addAccountTransaction(this.props.accountId,transactionItem)
-        console.log(transactionItem)
+        this.cashApiClient.addAccountTransaction(this.props.accountId,transactionItem).then(res =>{
+            this.componentDidMount()
+        })
     }
 
 

@@ -4,7 +4,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 module.exports = {
   // Where files should be sent once they are bundled
  entry: {
-     accountDetails: "/src/AccountTransactionDetails.js"
+     accountDetails: "/src/AccountTransactionDetails.js",
+     accountNavigation: "/src/AccountNavigation.js"
  },
  output: {
    path: path.join(__dirname, '/static/js'),
