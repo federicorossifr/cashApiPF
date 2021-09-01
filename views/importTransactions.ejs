@@ -6,12 +6,18 @@
 <body>
     <main class="flex">
         <%- include('./navbar.ejs') %>
-        <form action="/api/v1/accounts/612b756d9991f60bb6f931f4/transactions/import" method="post" enctype="multipart/form-data">
-            <input type="file" name="transactionFile" />
-            <input type="text" name="accountid" />
-            <input type="submit" />
-          </form>
+
+        <div class="d-flex flex-column flex-grow-1 p-3 ">
+            <div class="card bg-dark my-card text-white ">
+                <h1 className="display-4">Importa movimenti</h1>
+            </div>
+            
+            <div class="import-section" id="importContainer">
+
+            </div>
+        </div>
+
     </main> 
 </body>
-
+<script type="text/javascript" src="/js/transactionImporter.js"></script>
 </html>

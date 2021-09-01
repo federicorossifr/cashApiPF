@@ -5,7 +5,8 @@ module.exports = {
   // Where files should be sent once they are bundled
  entry: {
      accountDetails: "/src/AccountTransactionDetails.js",
-     accountNavigation: "/src/AccountNavigation.js"
+     accountNavigation: "/src/AccountNavigation.js",
+     transactionImporter:"/src/TransactionImporter.js"
  },
  output: {
    path: path.join(__dirname, '/static/js'),

@@ -243,3 +243,5 @@ ReactDOM.render(
     <AccountTransactionDetails accountId={accountId}/>,
     document.getElementById("root")
 )
+
+module.exports = ItemList

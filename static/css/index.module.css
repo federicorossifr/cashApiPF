@@ -84,3 +84,12 @@
 .navbar-form-control {
     margin-top:5px;
 }
+
+.import-section {
+    margin-top:18px;
+    max-width: 50vw;
+}
+
+.import-section form > input,.import-section  form > select {
+    margin-bottom: 5px;
+}
