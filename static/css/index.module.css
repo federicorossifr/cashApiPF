@@ -87,9 +87,28 @@
 
 .import-section {
     margin-top:18px;
+}
+
+.main-content {
+    overflow: auto;
+}
+
+.import-section form {
     max-width: 50vw;
+    margin-bottom: 18px;
 }
 
 .import-section form > input,.import-section  form > select {
     margin-bottom: 5px;
+}
+
+.my-float-btn {
+    position: fixed;
+    top: 90vh;
+    width: 10vw;
+    height: 6vh;
+    font-size: larger !important;
+    font-weight: bolder !important;
+    left: 50vw;
+    box-shadow: 0 1rem 3rem rgba(0,0,0,.175) !important;
 }

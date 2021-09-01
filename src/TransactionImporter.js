@@ -1,17 +1,22 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import CashApiClient from './cashAPIClient'
+import ItemList from './TransactionList'
+import {BootStrapToast, getToasts} from './BootStrapToast'
 
 class TransactionImporter extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
             accounts:[],
-            selectedAccountId:""
+            selectedAccountId:"",
+            toImport:[],
+            reviewReady:false,
         }
         this.cashApiClient = new CashApiClient("/")
         this.startImport = this.startImport.bind(this)
         this.onAccountSelectedChange = this.onAccountSelectedChange.bind(this)
+        this.commitImport = this.commitImport.bind(this)
     }
 
     componentDidMount() {
@@ -35,8 +40,17 @@ class TransactionImporter extends React.Component {
     startImport(event) {
         event.preventDefault()
         let toUpload = event.target.children[0].files[0]
-        console.log(toUpload)
-        this.cashApiClient.uploadAccountTransactions(this.state.selectedAccountId,toUpload)
+        this.cashApiClient.uploadAccountTransactions(this.state.selectedAccountId,toUpload).then((res) => {
+            this.setState({reviewReady:true,toImport:res,toNotify:true})
+        })
+
+    }
+
+    commitImport() {
+        this.cashApiClient.addAccountTransaction(this.state.selectedAccountId,this.state.toImport).then((res) => {
+            this.setState({reviewReady:false,toImport:[]})
+            getToasts()[0].show()
+        })
     }
 
     render() {
@@ -49,11 +63,16 @@ class TransactionImporter extends React.Component {
                     </select>
                     <button class="form-control btn-dark" type="submit">Importa</button>
                 </form>
+                <div>
+                 {this.state.reviewReady && <ItemList elements={this.state.toImport} />}
+                 {this.state.reviewReady && <button onClick={this.commitImport} className="btn btn-success my-float-btn"><i class="bi bi-check-circle-fill"></i> Conferma</button> }
+
+                </div>
+                <BootStrapToast id="notify-toast" title="Importazione movimenti" message="Importazione completata" />
             </div>
         )
     }
 }
-
 ReactDOM.render(
     <TransactionImporter />,
     document.getElementById("importContainer")

@@ -6,47 +6,8 @@ import DatePicker  from "react-datepicker";
 import { parseISO } from 'date-fns'
 import { it } from 'date-fns/locale'
 import format from 'date-fns/format';
+import ItemList from './TransactionList.js'
 
-class ItemList extends React.Component {
-
-    formatDate(dateString) {
-        let parsed = parseISO(dateString)
-        let formatted = format(parsed,"dd.MM.yyyy")
-        return formatted;
-    }
-
-    renderItems() {
-        const items = this.props.elements.map((element,index) => 
-            <tr key={element._id}>
-                <td>{this.formatDate(element.date)}</td>
-                <td className={element.amountIn ? "moneyIn":"moneyOut"}>{element.amountIn ? element.amountIn:element.amountOut}€</td>
-                <td>{element.type}</td>
-                <td>{element.category}</td>
-                <td>{element.description}</td>
-            </tr>
-        )
-        return items
-    }
-
-    render() {
-        return (
-            <table className="table  table-striped table-hover">
-                <thead className="table-dark">
-                    <tr>
-                        <th>Data</th>
-                        <th>Importo</th>
-                        <th>Tipo</th>
-                        <th>Categoria</th>
-                        <th>Descrizione</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {this.renderItems()}
-                </tbody>
-            </table>
-        )
-    }
-}
 
 class Summary extends React.Component {
 
@@ -186,7 +147,7 @@ class AccountTransactionDetails extends React.Component {
 
     addItem(transactionItem) {
         transactionItem["accountId"] = this.props.accountId
-        this.cashApiClient.addAccountTransaction(this.props.accountId,transactionItem).then(res =>{
+        this.cashApiClient.addAccountTransaction(this.props.accountId,[transactionItem]).then(res =>{
             this.componentDidMount()
         })
     }
