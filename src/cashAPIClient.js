@@ -36,6 +36,9 @@ class CashApiClient {
         return fetch("/api/v1/accounts/"+accountId+"/transactions/import",opts).then(res => res.json())
     }
 
+    getAggregatedAccounts() {
+        return fetch("/api/v1/accounts/aggregate").then(res => res.json())
+    }
 }
 
 module.exports = CashApiClient

@@ -6,7 +6,9 @@ module.exports = {
  entry: {
      accountDetails: "/src/AccountTransactionDetails.js",
      accountNavigation: "/src/AccountNavigation.js",
-     transactionImporter:"/src/TransactionImporter.js"
+     transactionImporter:"/src/TransactionImporter.js",
+     homeCharts:"/src/HomeCharts.js"
+
  },
  output: {
    path: path.join(__dirname, '/static/js'),
