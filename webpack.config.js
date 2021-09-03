@@ -4,10 +4,11 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 module.exports = {
   // Where files should be sent once they are bundled
  entry: {
-     accountDetails: "/src/AccountTransactionDetails.js",
+     /*accountDetails: "/src/AccountTransactionDetails.js",
      accountNavigation: "/src/AccountNavigation.js",
      transactionImporter:"/src/TransactionImporter.js",
-     homeCharts:"/src/HomeCharts.js"
+     homeCharts:"/src/HomeCharts.js"*/
+     index: "/src/EntryPoint.js"
 
  },
  output: {

@@ -1,13 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import CashApiClient from './cashAPIClient'
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker  from "react-datepicker";
-import { parseISO } from 'date-fns'
-import { it } from 'date-fns/locale'
-import format from 'date-fns/format';
-import ItemList from './TransactionList.js'
-
+import ItemList from '../shared/TransactionList.js'
+import { withRouter } from "react-router-dom";
 
 class Summary extends React.Component {
 
@@ -113,23 +109,23 @@ class NewTransactionForm extends React.Component {
     }
 }
 
-class AccountTransactionDetails extends React.Component {
+class AccountDetails extends React.Component {
     constructor(props) {
         super(props)
-        console.log("Inited dashboard")
         this.state = {
             elements:[],
             viewElements:[],
             isLoaded:false,
             searchInput:""
         } 
-        this.cashApiClient = new CashApiClient("/")
+
+        this.cashApiClient = this.props.cashApiClient
         this.addItem = this.addItem.bind(this)
         this.onSearchChange = this.onSearchChange.bind(this)
     }
 
     componentDidMount() {
-        this.cashApiClient.allAccountTransactions(this.props.accountId).then(result => 
+        this.cashApiClient.allAccountTransactions(this.props.match.params.accountId).then(result => 
         {
             let sorted = result.sort((a,b) => {
                 return (new Date(a.date) < new Date(b.date));
@@ -143,11 +139,18 @@ class AccountTransactionDetails extends React.Component {
         })
     }
 
+    componentDidUpdate(prevProps) {
+        console.log(prevProps)
+        if(prevProps.match.params.accountId != this.props.match.params.accountId) {
+            this.componentDidMount()
+        }
+    }
+
 
 
     addItem(transactionItem) {
-        transactionItem["accountId"] = this.props.accountId
-        this.cashApiClient.addAccountTransaction(this.props.accountId,[transactionItem]).then(res =>{
+        transactionItem["accountId"] = this.props.match.params.accountId
+        this.cashApiClient.addAccountTransaction(this.props.match.params.accountId,[transactionItem]).then(res =>{
             this.componentDidMount()
         })
     }
@@ -173,20 +176,20 @@ class AccountTransactionDetails extends React.Component {
                 <br></br><br></br>
 
                 <div className="row">
-                    <NewTransactionForm addItemCallback={this.addItem} />
+                    {this.state.isLoaded && <NewTransactionForm addItemCallback={this.addItem} />}
                 </div>
 
                 <br></br>
                 
+                {this.state.isLoaded &&
                 <div className="row">
                     <div className="col-2">
                         <input className="bg-dark form-control text-white my-search-input" value={this.state.searchInput} onChange={this.onSearchChange} placeholder="Cerca movimento"></input>
                     </div>
-                </div>
+                </div>}
 
 
 
-                {!this.state.isLoaded && <label>Loading...</label>}
                 <div className="row">
                     <div className="col">
                         {this.state.isLoaded && <ItemList elements={this.state.viewElements} removeCallback={this.handleRemove} />}
@@ -199,10 +202,4 @@ class AccountTransactionDetails extends React.Component {
 }
 
 
-const accountId = document.getElementById("root").getAttribute("data-account-id")
-ReactDOM.render(
-    <AccountTransactionDetails accountId={accountId}/>,
-    document.getElementById("root")
-)
-
-module.exports = ItemList
+export default withRouter(AccountDetails)

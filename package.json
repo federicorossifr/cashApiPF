@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "build": "webpack --mode production"
+    "build": "webpack --mode production",
+    "buildDev": "webpack --mode development"
   },
   "author": "Federico Rossi",
   "license": "ISC",

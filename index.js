@@ -16,6 +16,10 @@ var viewRouter = require("./lib/viewRoutes")
 app.use("/api/v1/",apiV1Router)
 app.use("/webapp",viewRouter)
 
+app.get("/", (req,res) => {
+    res.render('spa.ejs')
+})
+
 
 var server = app.listen(8080,() => {
     var host = server.address().address
