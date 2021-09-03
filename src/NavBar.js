@@ -1,4 +1,5 @@
 import React from "react";
+import NewAccountForm from "./shared/AccountNavigation";
 import { NavLink, Link, Route, Switch } from "react-router-dom";
 
 
@@ -21,6 +22,7 @@ class Navbar extends React.Component {
         return entries;
     }
 
+
     render() {
         return (
             <div id="navbar" className="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" >
@@ -36,6 +38,7 @@ class Navbar extends React.Component {
                 </li>
                 <hr />
                 {this.renderAccountList(this.props.accountList)}
+                <NewAccountForm cashApiClient={this.props.cashApiClient} onNewAccountSubmitted={this.props.onNewAccountSubmitted}/>
                 <hr />
 
                 <li>

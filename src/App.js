@@ -1,12 +1,12 @@
 import React from "react";
 import Navbar from "./NavBar";
 import AccountDetails from "./pages/AccountTransactionDetails";
+import TransactionImporter from "./pages/TransactionImporter";
 import CashApiClient from './cashAPIClient'
-import { Link, Route, Switch, useParams  } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
+import HomeCharts from "./pages/HomeCharts";
 
-const Home = () => {
-    return (<div>This is home</div>)
-}
+
 
 
 
@@ -23,6 +23,7 @@ class App extends React.Component {
             }
         }
         this.cashApiClient = new CashApiClient("/")
+        this.onNewAccountSubmitted = this.onNewAccountSubmitted.bind(this)
     }
 
 
@@ -32,10 +33,14 @@ class App extends React.Component {
         })
     }
 
+    onNewAccountSubmitted(account) {
+        this.componentDidMount()
+    }
+
      render() {
          return (
             <main className="flex">
-            {this.state.accountList.accountsReady && <Navbar accountList={this.state.accountList} />}
+            {this.state.accountList.accountsReady && <Navbar accountList={this.state.accountList} cashApiClient={this.cashApiClient} onNewAccountSubmitted={this.onNewAccountSubmitted}/>}
             <div className="d-flex flex-column flex-grow-1 p-3 account-summary">
                 <Route exact path="/">
                 <div className="card bg-dark my-card text-white mb-3">
@@ -44,8 +49,9 @@ class App extends React.Component {
                 </Route>
 
                 <Switch>
-                    <Route exact path="/"><Home /></Route>
+                    <Route exact path="/"><HomeCharts accountList={this.state.accountList} cashApiClient={this.cashApiClient} /></Route>
                     <Route exact path="/accounts/:accountId/"><AccountDetails cashApiClient={this.cashApiClient} /></Route>
+                    <Route exact path="/import"><TransactionImporter cashApiClient={this.cashApiClient} accountList={this.state.accountList} /></Route>
                 </Switch>
     
     

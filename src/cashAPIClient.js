@@ -40,8 +40,12 @@ class CashApiClient {
         return fetch("/api/v1/accounts/aggregate").then(res => res.json())
     }
 
-    getAggregatedCategories() {
-        return fetch("/api/v1/categories/aggregate").then(res => res.json())
+
+    getAggregatedCategories(accountId) {
+        if(!accountId)
+            return fetch("/api/v1/categories/aggregate").then(res => res.json())
+        else
+            return fetch("/api/v1/accounts/"+accountId+"/transactions/aggregate").then(res=> res.json())
     }
 }
 

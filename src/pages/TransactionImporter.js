@@ -1,28 +1,18 @@
 import React, { Component } from 'react'
-import ReactDOM from 'react-dom'
-import CashApiClient from './cashAPIClient'
-import ItemList from './TransactionList'
-import {BootStrapToast, getToasts} from './BootStrapToast'
+import ItemList from '../shared/TransactionList'
+import {BootStrapToast, getToasts} from '../shared/BootStrapToast'
 
 class TransactionImporter extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            accounts:[],
-            selectedAccountId:"",
+            selectedAccountId:this.props.accountList.accounts[0]._id,
             toImport:[],
             reviewReady:false,
         }
-        this.cashApiClient = new CashApiClient("/")
         this.startImport = this.startImport.bind(this)
         this.onAccountSelectedChange = this.onAccountSelectedChange.bind(this)
         this.commitImport = this.commitImport.bind(this)
-    }
-
-    componentDidMount() {
-        this.cashApiClient.allAccounts().then( (accounts) => {
-            this.setState({accounts:accounts, isLoaded:true, selectedAccountId: accounts[0]._id})
-        })
     }
 
     onAccountSelectedChange(event) {
@@ -31,7 +21,7 @@ class TransactionImporter extends React.Component {
     }
 
     renderAccountSelections() {
-        let items = this.state.accounts.map((acc,index) => 
+        let items = this.props.accountList.accounts.map((acc,index) => 
             <option key={acc._id} value={acc._id}>{acc.name}</option>
         )
         return items;
@@ -40,14 +30,14 @@ class TransactionImporter extends React.Component {
     startImport(event) {
         event.preventDefault()
         let toUpload = event.target.children[0].files[0]
-        this.cashApiClient.uploadAccountTransactions(this.state.selectedAccountId,toUpload).then((res) => {
+        this.props.cashApiClient.uploadAccountTransactions(this.state.selectedAccountId,toUpload).then((res) => {
             this.setState({reviewReady:true,toImport:res,toNotify:true})
         })
 
     }
 
     commitImport() {
-        this.cashApiClient.addAccountTransaction(this.state.selectedAccountId,this.state.toImport).then((res) => {
+        this.props.cashApiClient.addAccountTransaction(this.state.selectedAccountId,this.state.toImport).then((res) => {
             this.setState({reviewReady:false,toImport:[]})
             getToasts()[0].show()
         })
@@ -55,7 +45,7 @@ class TransactionImporter extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="import-section">
                 <form onSubmit={this.startImport} method="post" enctype="multipart/form-data">
                     <input required class="form-control" type="file" name="transactionFile" />
                     <select value={this.state.selectedAccountId} class="form-select"  onChange={this.onAccountSelectedChange}>
@@ -73,8 +63,6 @@ class TransactionImporter extends React.Component {
         )
     }
 }
-ReactDOM.render(
-    <TransactionImporter />,
-    document.getElementById("importContainer")
-)
 
+
+export default TransactionImporter
