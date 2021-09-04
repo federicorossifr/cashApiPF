@@ -11,15 +11,12 @@ app.use(express.urlencoded({extended: true}));
 app.use(express.json()) // To parse the incoming requests with JSON payloads
 
 var apiV1Router = require("./lib/apiV1Routes")
-var viewRouter = require("./lib/viewRoutes")
 
 app.use("/api/v1/",apiV1Router)
-app.use("/webapp",viewRouter)
 
-app.get("/", (req,res) => {
-    res.render('spa.ejs')
+app.get("*",function(req,res) {
+    res.sendFile(__dirname+"/static/index.html")
 })
-
 
 var server = app.listen(8080,() => {
     var host = server.address().address

@@ -45,7 +45,7 @@ class AccountAggregationChart extends React.Component {
             data:getInitialData(),
             isLoaded:false
         }
-        this.options = { maintainAspectRatio: false	}
+        this.options = { maintainAspectRatio: false, scales: {r: {angleLines: {color: 'white'},grid: {color: 'white'}, ticks:{color:'white'}}}	}
         this.getElementAtEvent = this.getElementAtEvent.bind(this)
     }
 
@@ -61,8 +61,9 @@ class AccountAggregationChart extends React.Component {
     componentDidMount() {
         console.log("trigger")
         this.props.cashApiClient.getAggregatedAccounts().then(res => {
-            let labels = res.map((el) => el.accountDetails[0].name)
-            let values = res.map((el) => Number(el.net.toFixed(2)))
+            let sortedRes = res.sort((a,b) => a.net < b.net)
+            let labels = sortedRes.map((el) => el.accountDetails[0].name)
+            let values = sortedRes.map((el) => Number(el.net.toFixed(2)))
             let newData = this.state.data
             newData.labels = labels
             newData.datasets[0].data = values

@@ -51,7 +51,9 @@ class App extends React.Component {
                 <Switch>
                     <Route exact path="/"><HomeCharts accountList={this.state.accountList} cashApiClient={this.cashApiClient} /></Route>
                     <Route exact path="/accounts/:accountId/"><AccountDetails cashApiClient={this.cashApiClient} /></Route>
-                    <Route exact path="/import"><TransactionImporter cashApiClient={this.cashApiClient} accountList={this.state.accountList} /></Route>
+                    <Route exact path="/import">
+                        {this.state.accountList.accountsReady && <TransactionImporter cashApiClient={this.cashApiClient} accountList={this.state.accountList} />}
+                    </Route>
                 </Switch>
     
     
