@@ -22,5 +22,5 @@ var server = app.listen(8080,() => {
     var host = server.address().address
     var port = server.address().port
     console.log("API Server started at http://localhost:%s/api/v1", port)
-    console.log("Homepage at http://localhost:%s/", port)
+    console.log("App at http://localhost:%s/", port)
 })
