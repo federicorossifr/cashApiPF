@@ -136,7 +136,7 @@ class TimeAggregationChart extends React.Component {
         this.state = {
             rawData:[],
             isLoaded:false,
-            selectedAccountId: this.props.accountList.accounts[0]._id
+            selectedAccountId: startId
         }
         this.options = { maintainAspectRatio: false, scales: {x: {stacked: true,},y: {stacked: true}}}
         this.prepareData = this.prepareData.bind(this)
