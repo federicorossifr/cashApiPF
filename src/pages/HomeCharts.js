@@ -129,6 +129,10 @@ class ExpenseAggregationChart extends React.Component {
 class TimeAggregationChart extends React.Component {
     constructor(props) {
         super(props)
+        let startId = 0;
+        if(this.props.accountList.accounts.length() > 0)
+            startId = this.props.accountList.accounts[0]._id
+
         this.state = {
             rawData:[],
             isLoaded:false,
