@@ -48,6 +48,10 @@ class CashApiClient {
             return fetch("/api/v1/accounts/"+accountId+"/transactions/aggregate").then(res=> res.json())
     }
 
+    getAggregatedByMonthYear() {
+        return fetch("/api/v1/test").then(res => res.json())
+    }
+
 }
 
 module.exports = CashApiClient

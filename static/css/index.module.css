@@ -123,6 +123,7 @@
 
 .chart-row {
     width: 80%;
+    height: 500px;
     margin-left: auto !important;
     margin-right: auto !important;
     margin-bottom: 50px !important;

@@ -126,6 +126,66 @@ class ExpenseAggregationChart extends React.Component {
     }
 }
 
+class TimeAggregationChart extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            rawData:[],
+            isLoaded:false,
+            selectedAccountId: this.props.accountList.accounts[0]._id
+        }
+        this.options = { maintainAspectRatio: false, scales: {x: {stacked: true,},y: {stacked: true}}}
+        this.prepareData = this.prepareData.bind(this)
+    }
+
+    componentDidMount() {
+        this.props.cashApiClient.getAggregatedByMonthYear().then(res => {
+            this.setState({rawData:res,isLoaded:true})
+        })
+    }
+
+    prepareData() {
+        let filteredAggregates = this.state.rawData.filter((el) => el._id.account == this.state.selectedAccountId)
+        let orderedAggregates = filteredAggregates.sort((a,b) => (a._id.y == b._id.y && a._id.m > b._id.m) || (a._id.y > b._id.y))
+        let inSeries = orderedAggregates.map((el) => el.totalIn)
+        let outSeries = orderedAggregates.map((el) => el.totalOut)
+        let saveSeries = orderedAggregates.map((el) => el.totalIn + el.totalOut)
+        let labels = orderedAggregates.map((el) => el._id.m+"/"+el._id.y)
+        let data = getInitialData()
+        data.labels = labels
+        data.datasets.push({},{})
+        
+        data.datasets[0].label = "Entrate"
+        data.datasets[1].label = "Spese"
+        data.datasets[2].label = "Risparmio"
+
+        data.datasets[0].data = inSeries
+        data.datasets[1].data = outSeries
+        data.datasets[2].data = saveSeries
+
+        data.datasets[2].type = 'line'
+
+        data.datasets[0].order = 1
+        data.datasets[1].order = 1
+        data.datasets[2].order = 0
+
+        data.datasets[0].backgroundColor = "rgba(126, 185, 63, 0.75)"
+        data.datasets[1].backgroundColor = "rgba(215, 49, 4, 0.75)"
+        data.datasets[2].backgroundColor = "rgb(10, 54, 157)"
+
+
+        return data;
+    }
+
+    render() {
+        this.prepareData()
+        return (
+            <Bar data={this.prepareData()} options={this.options} />
+        )
+    }
+
+}
+
 class HomeCharts extends React.Component {
     constructor(props) {
         super(props)
@@ -154,6 +214,13 @@ class HomeCharts extends React.Component {
                         </div>
                         </div>
                 </div>
+
+                <div className="row chart-row">
+                    <div className="col-sm-12">
+                        <TimeAggregationChart accountList={this.props.accountList} cashApiClient={this.props.cashApiClient} />
+                    </div>
+                </div>
+
             </div>
         )
     }
