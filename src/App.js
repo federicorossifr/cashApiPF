@@ -37,6 +37,10 @@ class App extends React.Component {
         this.componentDidMount()
     }
 
+    hasAccounts() {
+        return this.state.accountList.accountsReady && this.state.accountList.accounts.length > 0;
+    }
+
      render() {
          return (
             <main className="flex">
@@ -49,10 +53,16 @@ class App extends React.Component {
                 </Route>
 
                 <Switch>
-                    <Route exact path="/">{this.state.accountList.accountsReady && <HomeCharts accountList={this.state.accountList} cashApiClient={this.cashApiClient} />}</Route>
+                    <Route exact path="/">
+                        {this.hasAccounts() && 
+                        <HomeCharts accountList={this.state.accountList} cashApiClient={this.cashApiClient} />
+                        }
+                    </Route>
                     <Route exact path="/accounts/:accountId/"><AccountDetails cashApiClient={this.cashApiClient} /></Route>
                     <Route exact path="/import">
-                        {this.state.accountList.accountsReady && <TransactionImporter cashApiClient={this.cashApiClient} accountList={this.state.accountList} />}
+                        {this.hasAccounts() &&
+                        <TransactionImporter cashApiClient={this.cashApiClient} accountList={this.state.accountList} />
+                        }
                     </Route>
                 </Switch>
     
