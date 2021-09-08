@@ -2,6 +2,7 @@ import React from "react";
 import Navbar from "./NavBar";
 import AccountDetails from "./pages/AccountTransactionDetails";
 import TransactionImporter from "./pages/TransactionImporter";
+import AccountInfo from './pages/AccountInfo'
 import CashApiClient from './cashAPIClient'
 import { Route, Switch } from "react-router-dom";
 import HomeCharts from "./pages/HomeCharts";
@@ -59,6 +60,11 @@ class App extends React.Component {
                         }
                     </Route>
                     <Route exact path="/accounts/:accountId/"><AccountDetails cashApiClient={this.cashApiClient} /></Route>
+                    <Route exact path="/accounts/:accountId/settings">
+                        {this.state.accountList.accountsReady &&
+                        <AccountInfo onAccountUpdate={this.onNewAccountSubmitted} accountList={this.state.accountList} cashApiClient={this.cashApiClient} />
+                        }
+                    </Route>
                     <Route exact path="/import">
                         {this.hasAccounts() &&
                         <TransactionImporter cashApiClient={this.cashApiClient} accountList={this.state.accountList} />

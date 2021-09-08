@@ -29,6 +29,11 @@ class CashApiClient {
         return fetch("/api/v1/accounts/",opts).then(res => res.json())
     }
 
+    updateAccount(accountId,newAccount) {
+        const opts = {method:'PUT', body:JSON.stringify(newAccount), headers:{'Content-Type': 'application/json'}}
+        return fetch("/api/v1/accounts/"+accountId,opts).then(res => res.json())
+    }
+
     uploadAccountTransactions(accountId,file) {
         const data = new FormData()
         data.append('transactionFile',file)
@@ -52,6 +57,10 @@ class CashApiClient {
         return fetch("/api/v1/test").then(res => res.json())
     }
 
+    deleteAccount(accountId) {
+        const opts = {method:'DELETE', body:JSON.stringify({}), headers:{'Content-Type': 'application/json'}}
+        return fetch("/api/v1/accounts/"+accountId,opts).then(res => res.json())
+    }
 }
 
 module.exports = CashApiClient

@@ -13,9 +13,12 @@ class Navbar extends React.Component {
     renderAccountList(accountList) {
         let entries = accountList.accounts.map( (account) => { 
             return(
-            <li key={account._id} className="nav-item">
-                <NavLink to={"/accounts/" + account._id} className="nav-link text-white" >
+            <li key={account._id} className="nav-item d-flex">
+                <NavLink to={"/accounts/" + account._id} className="nav-link text-white flex-grow-1" >
                     <i className="bi bi-wallet"></i>  {account.name}
+                </NavLink>
+                <NavLink to={"/accounts/" + account._id+"/settings"} className="nav-link text-white" >
+                    <i class="bi bi-sliders"></i>
                 </NavLink>
             </li>)
         })
