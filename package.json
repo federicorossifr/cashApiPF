@@ -11,6 +11,7 @@
   "author": "Federico Rossi",
   "license": "ISC",
   "dependencies": {
+    "bayes-classifier": "0.0.5",
     "body-parser": "^1.19.0",
     "chart.js": "^3.5.1",
     "connect-history-api-fallback": "^1.6.0",
