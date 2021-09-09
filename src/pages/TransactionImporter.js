@@ -13,6 +13,7 @@ class TransactionImporter extends React.Component {
         this.startImport = this.startImport.bind(this)
         this.onAccountSelectedChange = this.onAccountSelectedChange.bind(this)
         this.commitImport = this.commitImport.bind(this)
+        this.onDatalistChange = this.onDatalistChange.bind(this)
     }
 
     onAccountSelectedChange(event) {
@@ -43,6 +44,17 @@ class TransactionImporter extends React.Component {
         })
     }
 
+    onDatalistChange(event,index) {
+        let changedValue = event.target.value
+        let transactions = this.state.toImport
+        let oldValue = transactions[index].category
+        transactions[index].category = changedValue
+        transactions[index].corrected = (oldValue != changedValue)
+        transactions[index].guessed = !transactions[index].corrected
+        console.log(transactions[index])
+        this.setState({toImport:transactions})
+    }
+
     render() {
         return (
             <div className="import-section">
@@ -54,7 +66,7 @@ class TransactionImporter extends React.Component {
                     <button class="form-control btn-dark" type="submit">Importa</button>
                 </form>
                 <div>
-                 {this.state.reviewReady && <ItemList elements={this.state.toImport} />}
+                 {this.state.reviewReady && <ItemList onDataListChange={this.onDatalistChange} elements={this.state.toImport} />}
                  {this.state.reviewReady && <button onClick={this.commitImport} className="btn btn-success my-float-btn"><i class="bi bi-check-circle-fill"></i> Conferma</button> }
 
                 </div>
