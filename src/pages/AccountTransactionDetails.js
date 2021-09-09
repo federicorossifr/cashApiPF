@@ -84,27 +84,46 @@ class NewTransactionForm extends React.Component {
         this.props.addItemCallback(transaction)
     }
 
+    renderCategoryDatalist() {
+        return (
+        <div className="col-lg-4 col-md-4 col-sm-6 mb-2">
+            <input name="category" onChange={this.onInputChange} value={this.state.categoryInput} class="form-control" list="datalistOptions" id="exampleDataList" placeholder="Categoria" aria-describedby="basic-addon1" />
+            <datalist id="datalistOptions">
+                {this.props.distinctCategories.map((cat) => <option value={cat} />)}
+            </datalist>
+        </div>
+        )
+    }
+
     render() {
 
         return (
             <form onSubmit={this.onFormSubmit}>
-                <div className="my-form-row">
-                    <div className="input-group">
-                        <span class="input-group-text"><i class="bi bi-currency-euro"></i></span>
-                        <input name="amount" value={this.state.amountInput} type="number" step="0.01" class="form-control" placeholder="Importo" onChange={this.onInputChange}></input>
+                <div className="container">
+                    <div className="row mb-1">
+                        <div className="col-lg-4 col-md-4 col-sm-6 mb-2">
+                            <div className="input-group">
+                                <span class="input-group-text"><i class="bi bi-currency-euro"></i></span>
+                                <input name="amount" value={this.state.amountInput} type="number" step="0.01" class="form-control" placeholder="Importo" onChange={this.onInputChange}></input>
+                            </div>
+                        </div>
+                        <div className="col-lg-4 col-md-4 col-sm-6 mb-2">
+                            <DatePicker  selected={this.state.dateInput} className="form-control" onChange={this.onDatePickerChange} />
+                        </div>
+                        <div className="col-lg-4 col-md-4 col-sm-6 mb-2">
+                            <input name="description" value={this.state.descriptionInput} type="text" class="form-control" placeholder="Descrizione" onChange={this.onInputChange}></input>
+                        </div>
                     </div>
-                    <DatePicker  selected={this.state.dateInput} className="form-control" onChange={this.onDatePickerChange} />
-                    <input name="category" value={this.state.categoryInput} type="text" class="form-control" placeholder="Categoria" onChange={this.onInputChange}></input>
 
-                </div>
-
-                <div className="my-form-row">
-                    <input name="description" value={this.state.descriptionInput} type="text" class="form-control" placeholder="Descrizione" onChange={this.onInputChange}></input>
-                    <input name="type" value={this.state.typeInput} type="text" class="form-control" placeholder="Tipo" onChange={this.onInputChange}></input>
-                </div>
-
-                <div className="my-form-row">
-                    <button type="submit" class="form-control btn btn-dark">Aggiungi</button>
+                    <div className="row mb-1">
+                        {this.renderCategoryDatalist()}
+                        <div className="col-lg-4 col-md-4 col-sm-6 mb-2">
+                            <input name="type" value={this.state.typeInput} type="text" class="form-control" placeholder="Tipo" onChange={this.onInputChange}></input>
+                        </div>
+                        <div className="col-lg-4 col-md-4 col-sm-6 mb-2">
+                            <button type="submit" class="form-control btn btn-dark">Aggiungi</button>
+                        </div>
+                    </div>
                 </div>
             </form>
         )
@@ -118,7 +137,8 @@ class AccountDetails extends React.Component {
             elements:[],
             viewElements:[],
             isLoaded:false,
-            searchInput:""
+            searchInput:"",
+            distinctCategories:[]
         } 
 
         this.cashApiClient = this.props.cashApiClient
@@ -132,11 +152,14 @@ class AccountDetails extends React.Component {
             let sorted = result.sort((a,b) => {
                 return (new Date(a.date) < new Date(b.date));
             })
-            console.log(sorted)
+            
+            let categories = result.map((el) => el.category)
+            let distinctCategories = Array.from(new Set(categories))
             this.setState({
                 elements:sorted,
                 viewElements:sorted,
-                isLoaded:true
+                isLoaded:true,
+                distinctCategories:distinctCategories
             })
         })
     }
@@ -178,14 +201,14 @@ class AccountDetails extends React.Component {
                 <br></br><br></br>
 
                 <div className="row">
-                    {this.state.isLoaded && <NewTransactionForm addItemCallback={this.addItem} />}
+                    {this.state.isLoaded && <NewTransactionForm distinctCategories={this.state.distinctCategories} addItemCallback={this.addItem} />}
                 </div>
 
                 <br></br>
                 
                 {this.state.isLoaded &&
                 <div className="row">
-                    <div className="col-2">
+                    <div className="col-lg-3 col-md-6 col-sm-12 mb-2">
                         <input className="bg-dark form-control text-white my-search-input" value={this.state.searchInput} onChange={this.onSearchChange} placeholder="Cerca movimento"></input>
                     </div>
                 </div>}

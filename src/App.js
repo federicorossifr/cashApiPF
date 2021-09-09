@@ -21,9 +21,11 @@ class App extends React.Component {
             accountList:{
                 accounts:[],
                 accountsReady:false
-            }
+            },
+            shouldNavShowFull:false
         }
         this.cashApiClient = new CashApiClient("/")
+        this.setNavShow = this.setNavShow.bind(this)
         this.onNewAccountSubmitted = this.onNewAccountSubmitted.bind(this)
     }
 
@@ -42,10 +44,18 @@ class App extends React.Component {
         return this.state.accountList.accountsReady && this.state.accountList.accounts.length > 0;
     }
 
+    setNavShow() {
+        let state = this.state.shouldNavShowFull
+        this.setState({
+            shouldNavShowFull:!state
+        })
+    }
+
      render() {
          return (
             <main className="flex">
-            {this.state.accountList.accountsReady && <Navbar accountList={this.state.accountList} cashApiClient={this.cashApiClient} onNewAccountSubmitted={this.onNewAccountSubmitted}/>}
+            <button onClick={this.setNavShow} className="d-md-none btn btn-dark text-white position-absolute top-0 start-0 ham-menu"><i class="bi bi-list"></i></button>
+            {this.state.accountList.accountsReady && <Navbar setNavShow={this.setNavShow} shouldNavShowFull={this.state.shouldNavShowFull} accountList={this.state.accountList} cashApiClient={this.cashApiClient} onNewAccountSubmitted={this.onNewAccountSubmitted}/>}
             <div className="d-flex flex-column flex-grow-1 p-3 account-summary">
                 <Route exact path="/">
                 <div className="card bg-dark my-card text-white mb-3">

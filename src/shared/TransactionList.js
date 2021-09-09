@@ -45,6 +45,13 @@ class ItemList extends React.Component {
         )
     }
 
+    renderCategory(transaction,distCategories,index) {
+        if(this.props.listRole == "importer") 
+            return this.renderDatalistCategory(transaction,distCategories,index)
+        else
+            return transaction.category
+    }
+
     renderItems() {
         let distinctCategories = this.getDistinctCategories(this.props.elements)
         const items = this.props.elements.map((element,index) => 
@@ -52,7 +59,7 @@ class ItemList extends React.Component {
                 <td>{this.formatDate(element.date)}</td>
                 <td className={element.amountIn ? "moneyIn":"moneyOut"}>{element.amountIn ? element.amountIn:element.amountOut}€</td>
                 <td>{element.type}</td>
-                <td>{this.renderDatalistCategory(element,distinctCategories,index)}</td>
+                <td>{this.renderCategory(element,distinctCategories,index)}</td>
                 <td>{element.description}</td>
             </tr>
         )

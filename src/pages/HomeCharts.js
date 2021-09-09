@@ -207,12 +207,12 @@ class HomeCharts extends React.Component {
         return (
             <div className="chart-rows-container">
                 <div className="row chart-row">
-                        <div className="col-sm-6">
+                        <div className="col-md-12 col-lg-6 col-sm-12 chart-widget">
                         <div id="my-chart-0">
                             <AccountAggregationChart onAccountSelected={this.onAccountSelected} accountList={this.props.accountList} cashApiClient={this.props.cashApiClient} />
                         </div>
                         </div>
-                        <div className="col-sm-6">
+                        <div className="col-md-12 col-lg-6 col-sm-12 chart-widget">
                         <div id="my-chart-1">
                             <ExpenseAggregationChart selectedAccountId={this.state.selectedAccountId} cashApiClient={this.props.cashApiClient}/>
                         </div>
@@ -220,7 +220,7 @@ class HomeCharts extends React.Component {
                 </div>
 
                 <div className="row chart-row">
-                    <div className="col-sm-12">
+                    <div className="col-md-12 col-lg-6 col-sm-12 chart-widget">
                         <TimeAggregationChart accountList={this.props.accountList} cashApiClient={this.props.cashApiClient} />
                     </div>
                 </div>

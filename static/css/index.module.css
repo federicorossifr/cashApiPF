@@ -121,10 +121,11 @@
     width: 15vw;
 }
 
-.chart-row {
-    width: 80%;
-    height: 500px;
-    margin-left: auto !important;
-    margin-right: auto !important;
-    margin-bottom: 50px !important;
+.chart-widget {
+    height:500px
+}
+
+.ham-menu {
+    border-radius: 0;
+    z-index: 100;
 }

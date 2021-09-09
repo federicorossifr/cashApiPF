@@ -66,7 +66,7 @@ class TransactionImporter extends React.Component {
                     <button class="form-control btn-dark" type="submit">Importa</button>
                 </form>
                 <div>
-                 {this.state.reviewReady && <ItemList onDataListChange={this.onDatalistChange} elements={this.state.toImport} />}
+                 {this.state.reviewReady && <ItemList listRole="importer" onDataListChange={this.onDatalistChange} elements={this.state.toImport} />}
                  {this.state.reviewReady && <button onClick={this.commitImport} className="btn btn-success my-float-btn"><i class="bi bi-check-circle-fill"></i> Conferma</button> }
 
                 </div>
