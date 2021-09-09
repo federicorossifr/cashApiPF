@@ -27,7 +27,7 @@ class Navbar extends React.Component {
 
     getNavClassName() {
         if(this.props.shouldNavShowFull)
-            return "d-block w-100 flex-column flex-shrink-0 p-3 text-white bg-dark"
+            return "position-absolute w-100 h-100 p-3 text-white bg-dark"
         else
             return "d-md-flex d-sm-none d-none flex-column flex-shrink-0 p-3 text-white bg-dark"
     }

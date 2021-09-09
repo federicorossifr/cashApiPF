@@ -216,7 +216,7 @@ class AccountDetails extends React.Component {
 
 
                 <div className="row">
-                    <div className="col">
+                    <div className="col overflow-auto">
                         {this.state.isLoaded && <ItemList elements={this.state.viewElements} removeCallback={this.handleRemove} />}
                     </div>
                 </div>

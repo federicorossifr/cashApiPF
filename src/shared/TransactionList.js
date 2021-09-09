@@ -75,7 +75,7 @@ class ItemList extends React.Component {
 
     render() {
         return (
-            <table className="table  table-striped table-hover">
+            <table className=" table table-striped table-hover">
                 <thead className="table-dark">
                     <tr>
                         <th>Data</th>
