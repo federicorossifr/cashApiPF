@@ -1,5 +1,5 @@
 import React from "react";
-import NewAccountForm from "./shared/AccountNavigation";
+import NewAccountForm from "./widgets/AccountNavigation";
 import { NavLink, Link, Route, Switch } from "react-router-dom";
 
 
@@ -14,10 +14,10 @@ class Navbar extends React.Component {
         let entries = accountList.accounts.map( (account) => { 
             return(
             <li key={account._id} className="nav-item d-flex">
-                <NavLink onClick={this.props.setNavShow} to={"/accounts/" + account._id} className="nav-link text-white flex-grow-1" >
+                <NavLink  to={"/accounts/" + account._id} className="nav-link text-white flex-grow-1" >
                     <i className="bi bi-wallet"></i>  {account.name}
                 </NavLink>
-                <NavLink onClick={this.props.setNavShow} to={"/accounts/" + account._id+"/settings"} className="nav-link text-white" >
+                <NavLink to={"/accounts/" + account._id+"/settings"} className="nav-link text-white" >
                     <i class="bi bi-sliders"></i>
                 </NavLink>
             </li>)
@@ -34,14 +34,14 @@ class Navbar extends React.Component {
 
     render() {
         return (
-            <div id="navbar" style={{zIndex:299}}className={this.getNavClassName()} >
+            <div id="navbar" style={{zIndex:99}} className={this.getNavClassName()} >
                 <a href="/" className="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                <span className="fs-4">CashAPI</span>
+                <span className="fs-4 fs-4 mt-lg-1 mt-md-5 mt-sm-5 mt-xs-5 mt-5">CashAPI</span>
                 </a>
             <hr />
             <ul className="nav nav-pills flex-column mb-auto">
                 <li className="nav-item">
-                    <NavLink onClick={this.props.setNavShow} exact={true} to="/" className="nav-link text-white" aria-current="page">
+                    <NavLink  exact={true} to="/" className="nav-link text-white" aria-current="page">
                         <i className="bi bi-bank"></i>  Home
                     </NavLink>
                 </li>
@@ -51,7 +51,7 @@ class Navbar extends React.Component {
                 <hr />
 
                 <li>
-                    <NavLink onClick={this.props.setNavShow} to="/import" className="nav-link text-white">
+                    <NavLink  to="/import" className="nav-link text-white">
                         <i className="bi bi-cloud-arrow-up"></i>  Importa
                     </NavLink>
                 </li>

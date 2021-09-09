@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import ItemList from '../shared/TransactionList'
-import {BootStrapToast, getToasts} from '../shared/BootStrapToast'
+import ItemList from '../widgets/TransactionList'
+import {BootStrapToast, getToasts} from '../widgets/BootStrapToast'
 
 class TransactionImporter extends React.Component {
     constructor(props) {

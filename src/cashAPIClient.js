@@ -61,6 +61,10 @@ class CashApiClient {
         const opts = {method:'DELETE', body:JSON.stringify({}), headers:{'Content-Type': 'application/json'}}
         return fetch("/api/v1/accounts/"+accountId,opts).then(res => res.json())
     }
+
+    getClassifiedDescription(description) {
+        return fetch("/api/v1/descriptions/classify?text="+description).then(res => res.json())
+    }
 }
 
 module.exports = CashApiClient

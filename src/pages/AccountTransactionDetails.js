@@ -1,134 +1,10 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 import "react-datepicker/dist/react-datepicker.css";
-import DatePicker  from "react-datepicker";
-import ItemList from '../shared/TransactionList.js'
+import ItemList from '../widgets/TransactionList.js'
+import NewTransactionForm from '../widgets/TransactionForm.js';
+import Summary from '../widgets/AccountSummary.js';
 import { withRouter } from "react-router-dom";
 
-class Summary extends React.Component {
-
-    computeSummary() {
-        if(this.props.elements.length < 1) return {'in':0,'out':0}
-        let incomes = this.props.elements.map((el) => (el.amountIn? el.amountIn:0))
-        let outcomes = this.props.elements.map((el) => (el.amountOut? el.amountOut:0))
-        let totIn = incomes.reduce((acc,el)=>acc+el);
-        let totOut = outcomes.reduce((acc,el)=>acc+el);
-        return {
-            'in':Number(totIn.toFixed(2)),
-            'out':Number(totOut.toFixed(2)),
-            'net':Number((totIn+totOut).toFixed(2))
-        }
-    }
-
-    render() {
-        let summary = this.computeSummary()
-        return (
-            <div class="card bg-dark my-card text-white ">
-                <h1 className="display-4">Saldo: {summary.net}<i class="bi bi-currency-euro"></i></h1>
-                <p className="lead">
-                    <label style={{color:"green"}}><i class="bi bi-plus-circle-fill"></i></label> {summary.in}<i class="bi bi-currency-euro"></i><br></br> 
-                    <label style={{color:"red"}}><i class="bi bi-dash-circle-fill"></i></label> {Math.abs(summary.out)}<i class="bi bi-currency-euro"></i>
-                </p>
-            </div>
-        )
-    }
-}
-
-class NewTransactionForm extends React.Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            amountInput:"",
-            typeInput:"",
-            descriptionInput:"",
-            categoryInput:"",
-            dateInput: new Date()
-        }
-
-        this.onDatePickerChange = this.onDatePickerChange.bind(this)
-        this.onInputChange = this.onInputChange.bind(this)
-        this.onFormSubmit = this.onFormSubmit.bind(this)
-    }
-
-    onDatePickerChange(date) {
-        this.setState({dateInput:date})
-    }
-
-    onInputChange(event) {
-        switch (event.target.name) {
-            case "amount":
-                this.setState({amountInput:event.target.value})
-                break;
-            case "category":
-                this.setState({categoryInput:event.target.value})
-                break;
-            case "description":
-                this.setState({descriptionInput:event.target.value})
-                break;
-            case "type":
-                this.setState({typeInput:event.target.value})
-                break;
-        }
-    }
-
-    onFormSubmit(event) {
-        event.preventDefault();
-        let transaction = {
-            'date':this.state.dateInput,
-            'description':this.state.descriptionInput,
-            'amountIn': (this.state.amountInput > 0) ? parseInt(this.state.amountInput): null,
-            'amountOut': (this.state.amountInput < 0) ? parseInt(this.state.amountInput): null,
-            'type': this.state.typeInput,
-            'category': this.state.categoryInput
-        }
-        this.props.addItemCallback(transaction)
-    }
-
-    renderCategoryDatalist() {
-        return (
-        <div className="col-lg-4 col-md-4 col-sm-6 mb-2">
-            <input name="category" onChange={this.onInputChange} value={this.state.categoryInput} class="form-control" list="datalistOptions" id="exampleDataList" placeholder="Categoria" aria-describedby="basic-addon1" />
-            <datalist id="datalistOptions">
-                {this.props.distinctCategories.map((cat) => <option value={cat} />)}
-            </datalist>
-        </div>
-        )
-    }
-
-    render() {
-
-        return (
-            <form onSubmit={this.onFormSubmit}>
-                <div className="container">
-                    <div className="row mb-1">
-                        <div className="col-lg-4 col-md-4 col-sm-6 mb-2">
-                            <div className="input-group">
-                                <span class="input-group-text"><i class="bi bi-currency-euro"></i></span>
-                                <input name="amount" value={this.state.amountInput} type="number" step="0.01" class="form-control" placeholder="Importo" onChange={this.onInputChange}></input>
-                            </div>
-                        </div>
-                        <div className="col-lg-4 col-md-4 col-sm-6 mb-2">
-                            <DatePicker  selected={this.state.dateInput} className="form-control" onChange={this.onDatePickerChange} />
-                        </div>
-                        <div className="col-lg-4 col-md-4 col-sm-6 mb-2">
-                            <input name="description" value={this.state.descriptionInput} type="text" class="form-control" placeholder="Descrizione" onChange={this.onInputChange}></input>
-                        </div>
-                    </div>
-
-                    <div className="row mb-1">
-                        {this.renderCategoryDatalist()}
-                        <div className="col-lg-4 col-md-4 col-sm-6 mb-2">
-                            <input name="type" value={this.state.typeInput} type="text" class="form-control" placeholder="Tipo" onChange={this.onInputChange}></input>
-                        </div>
-                        <div className="col-lg-4 col-md-4 col-sm-6 mb-2">
-                            <button type="submit" class="form-control btn btn-dark">Aggiungi</button>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        )
-    }
-}
 
 class AccountDetails extends React.Component {
     constructor(props) {
@@ -201,7 +77,7 @@ class AccountDetails extends React.Component {
                 <br></br><br></br>
 
                 <div className="row">
-                    {this.state.isLoaded && <NewTransactionForm distinctCategories={this.state.distinctCategories} addItemCallback={this.addItem} />}
+                    {this.state.isLoaded && <NewTransactionForm cashApiClient={this.cashApiClient} distinctCategories={this.state.distinctCategories} addItemCallback={this.addItem} />}
                 </div>
 
                 <br></br>
